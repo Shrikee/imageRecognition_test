@@ -23,8 +23,3 @@ cd ./frontend
 npm i
 add .env variable VUE_APP_SERVER_ADDRESS=SERVER_ADDRESS ( ngrok link to server )
 npm run serve
-<<<<<<< HEAD
-```
-=======
-```
->>>>>>> 29fda6ec105add8d12213a8bf56c79282c27de88

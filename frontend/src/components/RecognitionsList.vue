@@ -18,11 +18,11 @@ import axios from 'axios';
 export default {
   data: () => ({
     results: [],
-    serverUrl: process.env.VUE_APP_SERVER_ADRESS,
+    serverUrl: process.env.VUE_APP_SERVER_ADDRESS,
   }),
   methods: {},
   mounted() {
-    axios.get(process.env.VUE_APP_SERVER_ADRESS + 'img').then(response => {
+    axios.get(process.env.VUE_APP_SERVER_ADDRESS + 'img').then(response => {
       this.results = response.data;
       this.results.reverse();
     });

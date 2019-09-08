@@ -47,7 +47,7 @@ export default {
       }
       axios({
         method: 'POST',
-        url: process.env.VUE_APP_SERVER_ADRESS + 'img',
+        url: process.env.VUE_APP_SERVER_ADDRESS + 'img',
         data: this.formData,
         headers: { 'content-type': 'multipart/form-data' },
       }).then(() => {

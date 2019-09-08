@@ -5,7 +5,7 @@ export default class Imagga {
   constructor(image) {
     this.apiKey = process.env.API_KEY;
     this.apiSecret = process.env.API_SECRET;
-    this.serverAdress = process.env.SERVER_ADRESS;
+    this.serverAdress = process.env.SERVER_ADDRESS;
     this.image = image;
     this.path = image.path;
     this.url = image.url;

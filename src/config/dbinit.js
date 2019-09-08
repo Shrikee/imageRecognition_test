@@ -9,7 +9,7 @@ mongoose.set('useCreateIndex', true);
 
 const dbInit = () => {
   mongoose
-    .connect(process.env.MONGO_ADRESS, { useNewUrlParser: true })
+    .connect(process.env.MONGO_ADDRESS, { useNewUrlParser: true })
     .then(() => logger.info('Connected to db...'))
     .catch(err => logger.error(`Could not connect to db...${err}`));
 };

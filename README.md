@@ -8,7 +8,7 @@ Nodejs + Vue.js(Vuetify) project. Imagga as image recognition service
 Install https://ngrok.com/ for port forwarding ( server to be acessable from the net )
 ### Server
 ```shad
-$ cd titanium_test
+$ cd project_dir
 $ npm i
 ```
 - add .env variables { API_KEY= Imagga key; API_SECRET= Imagga secret; SERVER_ADDRESS= ngrok adress ( frontend will be doing calls to this link ) MONGO_ADDRESS= link to DB } 

@@ -3,7 +3,7 @@
 Nodejs + Vue.js(Vuetify) project.
 Imagga as image recognition service 
 
--Instalation : 
+- Instalation : 
     Install ngrok for port forwarding ( server to be acessable from the net )
 
 Server side : 
@@ -16,9 +16,9 @@ Server side :
     ]
 
 Frontend :
-    -cd ./frontend
-    -npm i
-    -add .env variable VUE_APP_SERVER_ADRESS=SERVER_ADRESS ( ngrok link to server )
+    - cd ./frontend
+    - npm i
+    - add .env variable VUE_APP_SERVER_ADRESS=SERVER_ADRESS ( ngrok link to server )
 
 ********
 

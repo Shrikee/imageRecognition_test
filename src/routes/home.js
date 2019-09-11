@@ -25,6 +25,10 @@ const upload = multer({
 const logger = pino();
 const router = new express.Router();
 
+router.get('/', (req, res) => {
+  res.status(200).send('ok')
+})
+
 router.get('/img', async (req, res) => {
   const response = await Image.find();
   res.status(200).send(response);

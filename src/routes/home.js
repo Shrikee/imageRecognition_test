@@ -3,6 +3,7 @@ import pino from 'pino';
 import multer from 'multer';
 import Image from '../models/image';
 import Imagga from '../middleware/imageTagger';
+import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from 'constants';
 
 const fileFilter = (req, file, callback) => {
   file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'
@@ -25,8 +26,9 @@ const upload = multer({
 const logger = pino();
 const router = new express.Router();
 
-router.get('/', (req, res) => {
-  res.status(200).send('ok')
+router.get('/deleteall', async (req, res) => {
+  await Image.deleteMany()
+  res.status(200).send('deleted')
 })
 
 router.get('/img', async (req, res) => {

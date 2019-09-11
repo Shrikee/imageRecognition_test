@@ -18,4 +18,4 @@ app.use('/uploads', express.static('uploads'));
 dbInit();
 
 const port = 5000;
-app.listen(port, () => logger.info(`Example app listening on ${port}`));
+app.listen(process.env.PORT || port, () => logger.info(`Example app listening on ${port || process.env.PORT}`));

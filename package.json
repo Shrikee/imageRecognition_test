@@ -6,8 +6,9 @@
   "scripts": {
     "lint-staged": "lint-staged",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./app.js",
-    "dev": "nodemon --exec babel-node ./src/app.js | pino-pretty"
+    "start": "node ./dist/app.js",
+    "dev": "nodemon --exec babel-node ./src/app.js | pino-pretty",
+    "build": "babel src --out-dir dist"
   },
   "author": "Roman",
   "license": "ISC",

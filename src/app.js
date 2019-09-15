@@ -4,10 +4,8 @@ import cors from 'cors';
 import dbInit from './config/dbinit';
 import router from './routes/home';
 
-require('dotenv').config();
-
-const app = express();
 const logger = pino();
+const app = express();
 
 app.use(cors());
 app.options('*', cors());
@@ -18,4 +16,6 @@ app.use('/uploads', express.static('uploads'));
 dbInit();
 
 const port = 5000;
-app.listen(process.env.PORT || port, () => logger.info(`Example app listening on ${port || process.env.PORT}`));
+app.listen(process.env.PORT || port, () =>
+  logger.info(`Example app listening on ${port || process.env.PORT}`),
+);

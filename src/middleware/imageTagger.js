@@ -1,6 +1,9 @@
 import request from 'request';
 import fs from 'fs';
+import pino from 'pino';
+import s3 from '../config/awsStorage';
 
+const logger = pino();
 export default class Imagga {
   constructor(image) {
     this.apiKey = process.env.API_KEY;
@@ -14,12 +17,12 @@ export default class Imagga {
     this.uploadFolder = 'uploads/';
   }
 
-  tagImage() {
+  tagImage(url) {
     return new Promise(resolve => {
       request
         .get(
           `https://api.imagga.com/v2/tags?limit=5&image_url=${encodeURIComponent(
-            this.serverAdress + this.path,
+            process.env.AWS_BUCKET ? url : this.serverAdress + this.path,
           )}`,
           (error, response, body) => {
             resolve(body);
@@ -43,5 +46,24 @@ export default class Imagga {
 
   getFileExtension() {
     this.fileExtension = `.${this.url.split('.').pop()}`;
+  }
+
+  async uploadToS3(file) {
+    const { name } = this;
+    logger.info(name);
+    await s3.putObject(
+      {
+        Bucket: process.env.AWS_BUCKET,
+        Key: this.name,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+        ACL: 'public-read',
+      },
+      (err, data) => {
+        if (err) logger.error(err, err.stack);
+        else logger.info(data);
+      },
+    );
+    return `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${this.name}`;
   }
 }

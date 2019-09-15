@@ -1,35 +1,16 @@
 import express from 'express';
 import pino from 'pino';
-import multer from 'multer';
 import Image from '../models/image';
 import Imagga from '../middleware/imageTagger';
-import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from 'constants';
+import upload from '../middleware/multer';
 
-const fileFilter = (req, file, callback) => {
-  file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'
-    ? callback(null, true)
-    : callback(null, false);
-};
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, './uploads');
-  },
-  filename: (req, file, callback) => {
-    callback(null, file.originalname);
-  },
-});
-const upload = multer({
-  storage,
-  limits: { fileSize: 1024 * 1024 * 10 },
-  fileFilter,
-});
 const logger = pino();
 const router = new express.Router();
 
 router.get('/deleteall', async (req, res) => {
-  await Image.deleteMany()
-  res.status(200).send('deleted')
-})
+  await Image.deleteMany();
+  res.status(200).send('deleted');
+});
 
 router.get('/img', async (req, res) => {
   const response = await Image.find();
@@ -37,7 +18,19 @@ router.get('/img', async (req, res) => {
 });
 
 router.post('/img', upload.single('file'), async (req, res) => {
-  if (req.file) {
+  if (process.env.AWS_BUCKET) {
+    const image = new Image({
+      name: req.file.originalname,
+    });
+    const imagga = new Imagga(image);
+    const url = await imagga.uploadToS3(req.file);
+    image.url = url;
+    const tags = await imagga.tagImage(url);
+    image.tags = tags;
+    await image.save();
+    res.status(200).send('ok');
+  } else if (req.file) {
+    logger.info(req.file);
     const image = new Image({
       path: req.file.path,
       name: req.file.originalname,
@@ -46,7 +39,7 @@ router.post('/img', upload.single('file'), async (req, res) => {
     const imagga = new Imagga(image);
     const tags = await imagga.tagImage();
     image.tags = tags;
-    image.save();
+    await image.save();
     res.status(200).send('ok');
   } else if (req.body.url) {
     logger.info(req.body.url);
@@ -54,7 +47,7 @@ router.post('/img', upload.single('file'), async (req, res) => {
       url: req.body.url,
       name: req.body.name,
     });
-    image.save();
+    await image.save();
     const imagga = new Imagga(image);
     imagga.getFileExtension();
     const pathToImage = await imagga.downloadImageFromUrl();

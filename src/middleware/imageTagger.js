@@ -49,8 +49,7 @@ export default class Imagga {
   }
 
   async uploadToS3(file) {
-    const { name } = this;
-    logger.info(name);
+    logger.info(this.name);
     await s3.putObject(
       {
         Bucket: process.env.AWS_BUCKET,

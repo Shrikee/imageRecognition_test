@@ -19,16 +19,22 @@ router.get('/img', async (req, res) => {
 
 router.post('/img', upload.single('file'), async (req, res) => {
   if (process.env.AWS_BUCKET) {
-    const image = new Image({
-      name: req.file.originalname,
-    });
-    const imagga = new Imagga(image);
-    const url = await imagga.uploadToS3(req.file);
-    image.url = url;
-    const tags = await imagga.tagImage(url);
-    image.tags = tags;
-    await image.save();
-    res.status(200).send('ok');
+    if (req.file) {
+      const image = new Image({
+        name: req.file.originalname
+      });
+      const imagga = new Imagga(image);
+      const url = await imagga.uploadToS3(req.file);
+      image.url = url;
+      const tags = await imagga.tagImage(url);
+      image.tags = tags;
+      await image.save();
+      res.status(200).send('ok');
+    }
+    else if (req.body.url || req.body.name) {
+
+    }
+
   } else if (req.file) {
     logger.info(req.file);
     const image = new Image({
